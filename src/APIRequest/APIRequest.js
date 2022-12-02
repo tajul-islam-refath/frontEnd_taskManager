@@ -17,21 +17,21 @@ import {
 } from "../redux/state-slice/task-slice";
 import { SetSummary } from "../redux/state-slice/summary-slice";
 import { SetProfile } from "../redux/state-slice/profile-slice";
-const BaseURL = "https://localhost:3000/api/v1";
+const BaseURL = "http://localhost:5000/api/v1";
 
 const AxiosHeader = { headers: { token: getToken() } };
 
 export function NewTaskRequest(title, description) {
   store.dispatch(ShowLoader());
 
-  let URL = BaseURL + "/createTask";
+  let URL = BaseURL + "/task/create";
   let PostBody = { title: title, description: description, status: "New" };
 
   return axios
     .post(URL, PostBody, AxiosHeader)
     .then((res) => {
       store.dispatch(HideLoader());
-      if (res.status === 200) {
+      if (res.status === 201) {
         SuccessToast("New Task Created");
         return true;
       } else {
@@ -48,7 +48,7 @@ export function NewTaskRequest(title, description) {
 
 export function LoginRequest(email, password) {
   store.dispatch(ShowLoader());
-  let URL = BaseURL + "/login";
+  let URL = BaseURL + "/user/login";
   let PostBody = { email: email, password: password };
   return axios
     .post(URL, PostBody)
@@ -80,7 +80,7 @@ export function RegistrationRequest(
   photo
 ) {
   store.dispatch(ShowLoader());
-  let URL = BaseURL + "/registration";
+  let URL = BaseURL + "/user/registration";
   let PostBody = {
     email: email,
     firstName: firstName,
@@ -119,7 +119,7 @@ export function RegistrationRequest(
 }
 export function TaskListByStatus(Status) {
   store.dispatch(ShowLoader());
-  let URL = BaseURL + "/listTaskByStatus/" + Status;
+  let URL = BaseURL + "/task/listTaskByStatus/" + Status;
   axios
     .get(URL, AxiosHeader)
     .then((res) => {
@@ -146,7 +146,7 @@ export function TaskListByStatus(Status) {
 }
 export function SummaryRequest() {
   store.dispatch(ShowLoader());
-  let URL = BaseURL + "/taskStatusCount";
+  let URL = BaseURL + "/task/taskCountByStatus";
   axios
     .get(URL, AxiosHeader)
     .then((res) => {
@@ -164,7 +164,7 @@ export function SummaryRequest() {
 }
 export function DeleteRequest(id) {
   store.dispatch(ShowLoader());
-  let URL = BaseURL + "/deleteTask/" + id;
+  let URL = BaseURL + "/task/delete/" + id;
   return axios
     .get(URL, AxiosHeader)
     .then((res) => {
@@ -185,7 +185,7 @@ export function DeleteRequest(id) {
 }
 export function UpdateStatusRequest(id, status) {
   store.dispatch(ShowLoader());
-  let URL = BaseURL + "/updateTaskStatus/" + id + "/" + status;
+  let URL = BaseURL + "/task/update/" + id + "/" + status;
   return axios
     .get(URL, AxiosHeader)
     .then((res) => {
@@ -206,7 +206,7 @@ export function UpdateStatusRequest(id, status) {
 }
 export function GetProfileDetails() {
   store.dispatch(ShowLoader());
-  let URL = BaseURL + "/profileDetails";
+  let URL = BaseURL + "/user/profileDetails";
   axios
     .get(URL, AxiosHeader)
     .then((res) => {
@@ -232,7 +232,7 @@ export function ProfileUpdateRequest(
 ) {
   store.dispatch(ShowLoader());
 
-  let URL = BaseURL + "/profileUpdate";
+  let URL = BaseURL + "/user/update";
 
   let PostBody = {
     email: email,
